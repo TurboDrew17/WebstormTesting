@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <style>
+        div.sliders {
+            width: 100%;
+            border: 1px solid black;
+        }
+
+        header, footer {
+            padding: 1px;
+            color: white;
+            background-color: black;
+            clear: left;
+            text-align: center;
+        }
+
+        nav {
+            float: left;
+            max-width: 150px;
+            margin: 0;
+            padding: 1em;
+        }
+
+        article {
+            margin-left: 170px;
+            padding: 1em;
+            overflow: auto;
+        }
+
+        p {
+            border: 5px solid black;
+        }
+    </style>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+    <title>Boxes and Cylinders</title>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+
+    attribute  vec4 vPosition;
+    attribute  vec4 vColor;
+    attribute  float movable;
+    varying vec4 fColor;
+
+    uniform mat4 modelViewMatrix;
+    uniform mat4 projectionMatrix;
+    uniform mat4 rotationMatrix;
+    uniform vec4 vOffset;
+
+    void main()
+    {
+        if(movable > 0.0)
+            gl_Position = projectionMatrix*modelViewMatrix*rotationMatrix*(vPosition + vOffset);
+        else
+            gl_Position = projectionMatrix*modelViewMatrix*rotationMatrix*vPosition;
+        fColor = vColor;
+    }
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+
+    precision mediump float;
+
+    varying vec4 fColor;
+
+    void
+    main()
+    {
+        gl_FragColor = fColor;
+    }
+    </script>
+
+    <script type="text/javascript" src="../Common/webgl-utils.js"></script>
+    <script type="text/javascript" src="../Common/initShaders.js"></script>
+    <script type="text/javascript" src="../Common/MV.js"></script>
+    <script type="text/javascript" src="box.js"></script>
+    <script type="text/javascript" src="cylinder.js"></script>
+    <script type="text/javascript" src="Scene.js"></script>
+</head>
+
+<header>
+    <h1>Boxes and Cylinders</h1>
+</header>
+<body>
+<div class="sliders">
+    <nav>
+        <p align="center">
+            <b>X Rotation</b>
+            <input type="range" min="-180.0" max="180.0" value="0.0" class="slider" id="RotationX" step="any">
+        </p>
+        <p align="center">
+            <b>Y Rotation</b>
+            <input type="range" min="-180.0" max="180.0" value="0.0" class="slider" id="RotationY" step="any">
+        </p>
+        <p align="center">
+            <b>Z Rotation</b>
+            <input type="range" min="-180.0" max="180.0" value="0.0" class="slider" id="RotationZ" step="any">
+        </p>
+    </nav>
+    <article>
+        <canvas id="gl-canvas" width="512" height="512">
+            Oops ... your browser doesn't support the HTML5 canvas element
+        </canvas>
+    </article>
+
+</div>
+<footer>
+    <h1>Copyright &copy; Druber</h1>
+</footer>
+</body>
+</html>
